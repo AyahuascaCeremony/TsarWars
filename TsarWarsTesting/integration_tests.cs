@@ -10,17 +10,26 @@ namespace TsarWarsTesting
 {
     public class integration_tests
     {
+        private StubFilmDataProvider _filmDataProvider;
+        private TsarWarsDataProcessor _tsarWars;
+        private IMapFilmCharacters _characterMapper;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _filmDataProvider = new StubFilmDataProvider();
+            _characterMapper = new StubFilmCharacterMapper();
+            _tsarWars = new TsarWarsDataProcessor(_filmDataProvider, _characterMapper);
+        }
+
         [Test]
         public void characters_fetched_are_correctly_mapped_to_meerkats()
         {
-            var filmDataProvider = new StubFilmDataProvider();
             const int episodeId = 4;
 
-            filmDataProvider.AddMovie(CreateMovie(episodeId));
+            _filmDataProvider.AddMovie(CreateMovie(episodeId));
 
-            var tsarWars = new TsarWarsDataProcessor(filmDataProvider);
-
-            var movieCharacters = tsarWars.FetchCharactersFor(episodeId);
+            var movieCharacters = _tsarWars.FetchCharactersFor(episodeId);
 
             Assert.That(movieCharacters.Count, Is.EqualTo(2));
             Assert.That(movieCharacters[0], Is.EqualTo("Aleksandr Orlov"));
@@ -30,14 +39,11 @@ namespace TsarWarsTesting
         [Test]
         public void different_characters_for_each_film_mapped_correctly()
         {
-            var filmDataProvider = new StubFilmDataProvider();
             const int episodeId = 1;
 
-            filmDataProvider.AddMovie(CreateMovie(episodeId));
+            _filmDataProvider.AddMovie(CreateMovie(episodeId));
 
-            var tsarWars = new TsarWarsDataProcessor(filmDataProvider);
-
-            var movieCharacters = tsarWars.FetchCharactersFor(episodeId);
+            var movieCharacters = _tsarWars.FetchCharactersFor(episodeId);
 
             Assert.That(movieCharacters.Count, Is.EqualTo(3));
             Assert.That(movieCharacters[0], Is.EqualTo("Sergei"));
@@ -106,5 +112,19 @@ namespace TsarWarsTesting
                 return _movies.Single(m => m.EpisodeId == episodeId);
             }
         }
+    }
+
+    public class StubFilmCharacterMapper : IMapFilmCharacters
+    {
+        private Dictionary<string, string> _starWarsToMeerkats = new Dictionary<string, string>();
+
+        public StubFilmCharacterMapper()
+        {
+            _starWarsToMeerkats.Add("Luke Skywalker", "Aleksandr Orlov");
+            _starWarsToMeerkats.Add("C-3PO", "Bogdhan");
+            _starWarsToMeerkats.Add("Hans Solo", "Sergei");
+            _starWarsToMeerkats.Add("Darth Vader", "Vassily");
+            _starWarsToMeerkats.Add("Obi Wan Kenobi", "Maiya");
+        } 
     }
 }

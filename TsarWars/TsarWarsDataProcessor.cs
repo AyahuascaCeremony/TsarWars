@@ -4,7 +4,7 @@ namespace TsarWars
 {
     public class TsarWarsDataProcessor
     {
-        public TsarWarsDataProcessor(IProvideFilmData filmDataProvider)
+        public TsarWarsDataProcessor(IProvideFilmData filmDataProvider, IMapFilmCharacters characterMapper)
         {
         }
 
