@@ -12,14 +12,21 @@ namespace TsarWarsTesting
     {
         private StubFilmDataProvider _filmDataProvider;
         private TsarWarsDataProcessor _tsarWars;
-        private IMapFilmCharacters _characterMapper;
 
         [SetUp]
         public void SetUp()
         {
             _filmDataProvider = new StubFilmDataProvider();
-            _characterMapper = new StubFilmCharacterMapper();
-            _tsarWars = new TsarWarsDataProcessor(_filmDataProvider, _characterMapper);
+            var starWarsToMeerkats = new Dictionary<string, string>
+            {
+                {"Luke Skywalker", "Aleksandr Orlov"},
+                {"C-3PO", "Bogdhan"},
+                {"Hans Solo", "Sergei"},
+                {"Darth Vader", "Vassily"},
+                {"Obi Wan Kenobi", "Maiya"}
+            };
+
+            _tsarWars = new TsarWarsDataProcessor(_filmDataProvider, starWarsToMeerkats);
         }
 
         [Test]
@@ -120,11 +127,7 @@ namespace TsarWarsTesting
 
         public StubFilmCharacterMapper()
         {
-            _starWarsToMeerkats.Add("Luke Skywalker", "Aleksandr Orlov");
-            _starWarsToMeerkats.Add("C-3PO", "Bogdhan");
-            _starWarsToMeerkats.Add("Hans Solo", "Sergei");
-            _starWarsToMeerkats.Add("Darth Vader", "Vassily");
-            _starWarsToMeerkats.Add("Obi Wan Kenobi", "Maiya");
+            
         } 
     }
 }
