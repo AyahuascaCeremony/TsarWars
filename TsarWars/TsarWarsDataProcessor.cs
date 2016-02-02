@@ -15,7 +15,16 @@ namespace TsarWars
 
         public List<string> FetchCharactersFor(int episodeId)
         {
-            return new List<string> {"Aleksandr Orlov", "Bogdhan"};
+            var movieData = _filmDataProvider.GetMovieData(episodeId);
+
+            var characters = new List<string>();
+
+            foreach (var character in movieData.Characters)
+            {
+                characters.Add(_characterMapper[character.Name]);
+            }
+
+            return characters;
         }
     }
 }
