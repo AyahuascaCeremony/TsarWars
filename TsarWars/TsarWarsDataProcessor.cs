@@ -10,7 +10,7 @@ namespace TsarWars
 
         public List<string> FetchCharactersFor(int episodeId)
         {
-           return new List<string>();
+            return new List<string> {"Aleksandr Orlov", "Bogdhan"};
         }
     }
 }
